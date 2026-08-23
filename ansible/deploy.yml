@@ -1,0 +1,22 @@
+---
+- name: Deploy DevOps Hello World Application
+  hosts: local
+  connection: local
+  become: false
+
+  tasks:
+
+    - name: Stop existing application container
+      command: docker rm -f devops-assignment-container
+      ignore_errors: true
+
+    - name: Start application container
+      command: docker run -d -p 8081:80 --name devops-assignment-container devops-assignment
+
+    - name: Verify running container
+      command: docker ps
+      register: docker_status
+
+    - name: Display container status
+      debug:
+        var: docker_status.stdout
